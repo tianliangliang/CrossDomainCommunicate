@@ -1,0 +1,40 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>A.com/a.html</title>
+    <meta charset="UTF-8">
+    <script src="CrossDomainCommunicate.src.js" type="text/javascript"></script>
+    <script>
+        var crossDomainCommunicate = new CrossDomainCommunicate('parent', 'MessengerDemo');
+
+        //增加监听自定义函数
+        crossDomainCommunicate.addListenFunc(function (msg) {
+            document.getElementById("status").innerHTML = msg;
+        });
+
+        //向子页面发送消息
+        function sendMsg(){
+            var iframeId = document.getElementById('iframeId');
+            //添加消息接收子页面，可以添加多个页面
+            crossDomainCommunicate.addTarget(iframeId.contentWindow, 'iframe1');
+
+            var msg = document.getElementById("statusText").value;
+            //向iframe1页面发送信息
+            crossDomainCommunicate.targets['iframe1'].send(msg);
+
+            //向所有子页面发送信息
+            //crossDomainCommunicate.send("message from parent: " + msg);
+        }
+
+    </script>
+
+</head>
+<body>
+<div id="a">
+    <h1>a.com/a.html</h1>
+    <input type="text" id="statusText" value="msg from a.com/a.html">
+    <button id="sendButton"  onclick="sendMsg()" >向b.com/b.html发送消息</button>
+    <p>接收到来自b.com/b.html的消息: <strong id="status"></strong>.</p>
+    <iframe id="iframeId" width="800" height="400" src="http://local.b.com/b.html"></iframe>
+</div>
+</body>
+</html>
